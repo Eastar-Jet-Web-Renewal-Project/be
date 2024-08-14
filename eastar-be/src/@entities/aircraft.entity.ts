@@ -1,45 +1,42 @@
-import {
-  Entity,
-  PrimaryColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-} from 'typeorm';
-import { Flight } from './flight,entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { FlightOperation } from './flightOperation.entity';
+import { MaintenanceOperation } from './maintenanceOperation.entity';
 
-@Entity('Aircraft')
+export enum AirplaneStatus {
+  AVAILABLE = 'AVAILABLE',
+  MAINTENANCE = 'MAINTENANCE',
+  STAND_BY = 'STAND_BY',
+  IN_OPERATION = 'IN_OPERATION',
+  RETIRED = 'RETIRED',
+  LEASED_OUT = 'LEASED_OUT',
+}
+
+@Entity()
 export class Aircraft {
-  @PrimaryColumn({ length: 20 })
-  aircraftId: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ length: 45 })
+  @Column({ length: 5, unique: true })
+  tailId: string;
+
+  @Column({ length: 20 })
+  manufacturer: string;
+
+  @Column({ length: 20 })
   model: string;
 
-  @Column('int', { unsigned: true })
-  totalSeatsEconomy: number;
+  @Column({ type: 'enum', enum: AirplaneStatus })
+  status: AirplaneStatus;
 
-  @Column('int', { unsigned: true })
-  totalSeatsBuisness: number;
+  @Column({ length: 50 })
+  currentConfigId: string;
 
-  @Column('int', { unsigned: true })
-  totalSeatsFirst: number;
+  @OneToMany(
+    () => MaintenanceOperation,
+    (maintenanceOp) => maintenanceOp.aircraft,
+  )
+  maintenanceOperations: MaintenanceOperation[];
 
-  @Column('int', { unsigned: true })
-  maxTakeoffWeight: number;
-
-  @Column('int', { unsigned: true })
-  maxFuelCapacity: number;
-
-  @Column('int', { unsigned: true })
-  maxRange: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @OneToMany(() => Flight, (flight) => flight.aircraft)
-  flights: Flight[];
+  @OneToMany(() => FlightOperation, (flightOp) => flightOp.aircraft)
+  flightOperations: FlightOperation[];
 }

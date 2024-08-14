@@ -1,51 +1,41 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  Unique,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Booking } from './booking.entity';
 
 @Entity()
-@Unique(['firebaseUID'])
-@Unique(['id'])
-@Unique(['phoneNumber'])
 export class User {
   @PrimaryGeneratedColumn()
-  uid: number;
+  id: number;
 
-  @Column({ type: 'varchar', length: 45 })
-  id: string;
+  @Column({ length: 20, unique: true })
+  userId: string;
 
-  @Column({ type: 'varchar', length: 45 })
-  name: string;
-
-  @Column({ type: 'varchar', length: 45 })
-  firebaseUID: string;
-
-  @Column({ type: 'varchar', length: 45 })
-  email: string;
-
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ length: 255 })
   password: string;
 
-  @Column({ type: 'tinyint', width: 1, default: 0 })
+  @Column({ length: 45 })
+  name: string;
+
+  @Column({ length: 45, unique: true })
+  email: string;
+
+  @Column()
   isAdmin: boolean;
 
   @Column({ type: 'date' })
   birth: Date;
 
-  @Column({ type: 'varchar', length: 15 })
-  phoneNumber: string;
+  @Column({ length: 25, unique: true })
+  phone: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @Column({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @Column({ type: 'timestamp' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   deletedAt: Date;
+
+  @OneToMany(() => Booking, (booking) => booking.bookingAgent)
+  bookings: Booking[];
 }
