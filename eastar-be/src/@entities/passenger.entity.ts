@@ -50,6 +50,9 @@ export class Passenger {
   @Column({ length: 25 })
   phoneNumber: string;
 
+  @Column({ length: 25 })
+  passportNumber: string;
+
   @Column({ type: 'enum', enum: Sex, nullable: true })
   sex: Sex;
 
