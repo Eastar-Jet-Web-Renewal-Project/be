@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  Unique,
+} from 'typeorm';
 import { Aircraft } from './aircraft.entity';
 
 export enum MaintenanceType {
@@ -20,6 +26,7 @@ export enum MaintenanceStatus {
 }
 
 @Entity()
+@Unique(['aircraft', 'scheduledDate', 'type'])
 export class MaintenanceOperation {
   @PrimaryGeneratedColumn()
   id: number;
