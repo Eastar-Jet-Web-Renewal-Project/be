@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   Unique,
+  JoinColumn,
 } from 'typeorm';
 import { Booking } from './booking.entity';
 
@@ -30,12 +31,13 @@ export enum PassengerStatus {
 }
 
 @Entity()
-@Unique(['booking', 'name', 'birth'])
+@Unique(['bookingId', 'name', 'birth'])
 export class Passenger {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @ManyToOne(() => Booking, (booking) => booking.passengers)
+  @JoinColumn({ name: 'bookingId', referencedColumnName: 'id' })
   booking: Booking;
 
   @Column()
@@ -47,10 +49,10 @@ export class Passenger {
   @Column({ length: 45, nullable: true })
   email: string;
 
-  @Column({ length: 25 })
+  @Column({ length: 25, nullable: true })
   phoneNumber: string;
 
-  @Column({ length: 25 })
+  @Column({ length: 25, nullable: true })
   passportNumber: string;
 
   @Column({ type: 'enum', enum: Sex, nullable: true })
@@ -62,7 +64,11 @@ export class Passenger {
   @Column({ type: 'enum', enum: Nationality, nullable: true })
   nationality: Nationality;
 
-  @Column({ type: 'enum', enum: PassengerStatus })
+  @Column({
+    type: 'enum',
+    enum: PassengerStatus,
+    default: PassengerStatus.ON_BOOKING,
+  })
   status: PassengerStatus;
 
   @Column({ nullable: true })

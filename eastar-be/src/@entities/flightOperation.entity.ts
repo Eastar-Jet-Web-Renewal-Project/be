@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   Unique,
+  JoinColumn,
 } from 'typeorm';
 import { Aircraft } from './aircraft.entity';
 import { Booking } from './booking.entity';
@@ -21,15 +22,17 @@ export enum FlightOperationStatus {
 }
 
 @Entity()
-@Unique(['flight', 'departureTime'])
+@Unique(['flightId', 'departureTime'])
 export class FlightOperation {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @ManyToOne(() => Aircraft, (aircraft) => aircraft.flightOperations)
+  @JoinColumn({ name: 'aircraftId', referencedColumnName: 'id' })
   aircraft: Aircraft;
 
   @ManyToOne(() => Flight, (flight) => flight.flightOperations)
+  @JoinColumn({ name: 'flightId', referencedColumnName: 'id' })
   flight: Flight;
 
   @Column({ type: 'enum', enum: FlightOperationStatus })

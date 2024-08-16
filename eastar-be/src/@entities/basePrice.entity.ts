@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   Unique,
+  JoinColumn,
 } from 'typeorm';
 import { Flight } from './flight.entity';
 
@@ -16,12 +17,13 @@ export enum BookingClass {
 }
 
 @Entity()
-@Unique(['flight', 'bookingClass'])
+@Unique(['flightId', 'bookingClass'])
 export class BasePrice {
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => Flight, (flight) => flight.basePrices)
+  @JoinColumn({ name: 'flightId', referencedColumnName: 'id' })
   flight: Flight;
 
   @Column({ type: 'enum', enum: BookingClass })

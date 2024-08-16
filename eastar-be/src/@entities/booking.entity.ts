@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { BookingClass } from './basePrice.entity';
 import { FlightOperation } from './flightOperation.entity';
@@ -24,6 +25,7 @@ export class Booking {
   uid: string;
 
   @ManyToOne(() => FlightOperation, (flightOp) => flightOp.bookings)
+  @JoinColumn({ name: 'flightOpId', referencedColumnName: 'id' })
   flightOperation: FlightOperation;
 
   @Column({ type: 'enum', enum: BookingClass })
@@ -39,6 +41,7 @@ export class Booking {
   status: BookingStatus;
 
   @ManyToOne(() => User, (user) => user.bookings, { nullable: true })
+  @JoinColumn({ name: 'bookingAgentId', referencedColumnName: 'userId' })
   bookingAgent: User;
 
   @Column({ length: 45 })

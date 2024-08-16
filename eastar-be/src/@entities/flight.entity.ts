@@ -20,7 +20,7 @@ export enum FlightStatus {
 @Entity()
 @Unique(['airlineCode', 'flightNumber'])
 export class Flight {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({ length: 10 })

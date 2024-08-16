@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { FlightOperation } from './flightOperation.entity';
 
 export enum DelayReason {
@@ -14,10 +20,11 @@ export enum DelayReason {
 
 @Entity()
 export class DelayLog {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @ManyToOne(() => FlightOperation, (flightOp) => flightOp.delayLogs)
+  @JoinColumn({ name: 'flightOperationId', referencedColumnName: 'id' })
   flightOperation: FlightOperation;
 
   @Column({ type: 'enum', enum: DelayReason })
